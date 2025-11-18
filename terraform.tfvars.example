@@ -1,0 +1,90 @@
+# ===========================================
+# Project Configuration
+# ===========================================
+
+project_name = "cat"
+environment  = "dev"
+
+# ===========================================
+# VPC Configuration
+# ===========================================
+
+vpc_cidr               = "10.180.0.0/20"
+availability_zones     = ["ap-northeast-2a", "ap-northeast-2c"]
+public_subnet_cidrs    = ["10.180.0.0/24", "10.180.1.0/24"]
+private_app_subnet_cidrs = ["10.180.4.0/22", "10.180.8.0/22"]
+private_db_subnet_cidrs  = ["10.180.2.0/24", "10.180.3.0/24"]
+
+# ===========================================
+# ECS Configuration
+# ===========================================
+
+enable_container_insights = false
+ecs_log_retention_days    = 7
+use_fargate_spot          = true
+
+# ===========================================
+# RDS Configuration
+# ===========================================
+
+create_rds = false
+
+# ===========================================
+# ALB Configuration
+# ===========================================
+
+# ACM Certificate ARN for HTTPS (optional)
+# To enable HTTPS, replace with your ACM certificate ARN from ap-northeast-2
+# Example: alb_certificate_arn = "arn:aws:acm:ap-northeast-2:123456789012:certificate/xxxxx"
+alb_certificate_arn = ""
+
+# Domain routing configuration
+# Backend API domain (connects to backend target group)
+backend_domain = "cicd-api.go-to-learn.net"
+
+# Frontend domain (connects to frontend target group)
+frontend_domain = "cicd.go-to-learn.net"
+
+# ===========================================
+# CloudFront Configuration
+# ===========================================
+
+# Enable CloudFront distribution
+create_cloudfront = false
+
+# ACM certificate ARN for CloudFront (must be in us-east-1 region)
+# To enable HTTPS for CloudFront, create a certificate in us-east-1 and provide ARN here
+# Example: cloudfront_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/xxxxx"
+cloudfront_certificate_arn = ""
+
+# ===========================================
+# WAF Configuration
+# ===========================================
+
+# Enable WAF Web ACL for CloudFront (provides DDoS protection and security rules)
+create_waf = false
+
+# Rate limit: Maximum requests per 5 minutes from a single IP
+# waf_rate_limit = 2000
+
+# Enable CloudWatch metrics and sampled requests for WAF (incurs additional costs)
+# waf_enable_cloudwatch_metrics = false
+# waf_enable_sampled_requests = false
+
+# ===========================================
+# Bastion Host Configuration
+# ===========================================
+
+# Enable Bastion Host for secure SSH access to private resources
+create_bastion = false
+
+# Bastion instance settings
+# bastion_instance_type = "t3.micro"
+# bastion_allocate_eip = true
+# bastion_private_key_path = "./ssh-keys"
+# bastion_root_volume_size = 8
+
+# SSH access restriction (default: allow from anywhere)
+# bastion_allowed_cidr_blocks = ["0.0.0.0/0"]
+# For security, restrict to your IP:
+# bastion_allowed_cidr_blocks = ["YOUR_IP/32"]
