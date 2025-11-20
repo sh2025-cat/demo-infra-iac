@@ -1,0 +1,38 @@
+{
+  "family": "cat-demo-backend",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::277679348386:role/cat-demo-cluster-task-execution-role",
+  "taskRoleArn": "arn:aws:iam::277679348386:role/cat-demo-cluster-task-role",
+  "containerDefinitions": [
+    {
+      "name": "backend",
+      "image": "hashicorp/http-echo:latest",
+      "essential": true,
+      "command": ["-text=Hello from Cat Demo Backend API"],
+      "portMappings": [
+        {
+          "containerPort": 5678,
+          "protocol": "tcp"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/cat-demo-backend",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "backend"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "wget -q --spider http://localhost:5678/ || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 30
+      }
+    }
+  ]
+}

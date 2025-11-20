@@ -39,7 +39,7 @@ jobs:
 
     - name: Download terraform.tfvars from S3
       run: |
-        aws s3 cp s3://softbank2025-cat-tfstate/cat-cicd/terraform.tfvars ./terraform.tfvars
+        aws s3 cp s3://softbank2025-cat-tfstate/cat-demo/terraform.tfvars ./terraform.tfvars
 
     - name: Terraform Init
       run: terraform init
@@ -71,7 +71,7 @@ jobs:
 
     - name: Download terraform.tfvars from S3
       run: |
-        aws s3 cp s3://softbank2025-cat-tfstate/cat-cicd/terraform.tfvars ./terraform.tfvars
+        aws s3 cp s3://softbank2025-cat-tfstate/cat-demo/terraform.tfvars ./terraform.tfvars
 
     - name: Terraform Init
       run: terraform init
@@ -91,7 +91,7 @@ jobs:
           --table-name softbank2025-cat-tfstate-lock \
           --filter-expression "contains(#info, :path)" \
           --expression-attribute-names '{"#info":"Info"}' \
-          --expression-attribute-values '{":path":{"S":"cat-cicd/terraform.tfstate"}}' \
+          --expression-attribute-values '{":path":{"S":"cat-demo/terraform.tfstate"}}' \
           --query 'Items[0].LockID.S' \
           --output text 2>/dev/null || echo "")
 
@@ -166,7 +166,7 @@ jobs:
 
     - name: Download terraform.tfvars from S3
       run: |
-        aws s3 cp s3://softbank2025-cat-tfstate/cat-cicd/terraform.tfvars ./terraform.tfvars
+        aws s3 cp s3://softbank2025-cat-tfstate/cat-demo/terraform.tfvars ./terraform.tfvars
 
     - name: Terraform Init
       run: terraform init
@@ -191,7 +191,7 @@ jobs:
           --table-name softbank2025-cat-tfstate-lock \
           --filter-expression "contains(#info, :path)" \
           --expression-attribute-names '{"#info":"Info"}' \
-          --expression-attribute-values '{":path":{"S":"cat-cicd/terraform.tfstate"}}' \
+          --expression-attribute-values '{":path":{"S":"cat-demo/terraform.tfstate"}}' \
           --query 'Items[0].LockID.S' \
           --output text 2>/dev/null || echo "")
 
@@ -241,7 +241,7 @@ jobs:
 
     - name: Download terraform.tfvars from S3
       run: |
-        aws s3 cp s3://softbank2025-cat-tfstate/cat-cicd/terraform.tfvars ./terraform.tfvars
+        aws s3 cp s3://softbank2025-cat-tfstate/cat-demo/terraform.tfvars ./terraform.tfvars
 
     - name: Terraform Init
       run: terraform init
@@ -259,7 +259,7 @@ jobs:
           --table-name softbank2025-cat-tfstate-lock \
           --filter-expression "contains(#info, :path)" \
           --expression-attribute-names '{"#info":"Info"}' \
-          --expression-attribute-values '{":path":{"S":"cat-cicd/terraform.tfstate"}}' \
+          --expression-attribute-values '{":path":{"S":"cat-demo/terraform.tfstate"}}' \
           --query 'Items[0].LockID.S' \
           --output text 2>/dev/null || echo "")
 

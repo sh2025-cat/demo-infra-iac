@@ -139,6 +139,18 @@ variable "frontend_domain" {
   default     = "cicd.go-to-learn.net"
 }
 
+variable "backend_port" {
+  description = "Port for backend target group"
+  type        = number
+  default     = 80
+}
+
+variable "frontend_port" {
+  description = "Port for frontend target group"
+  type        = number
+  default     = 80
+}
+
 # ===========================================
 # CloudFront Configuration
 # ===========================================

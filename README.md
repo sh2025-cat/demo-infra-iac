@@ -318,12 +318,15 @@ Terraform으로 배포되는 AWS 리소스:
 - **ALB**: HTTP(80) + HTTPS(443)
   - DNS: `cat-demo-alb-*.ap-northeast-2.elb.amazonaws.com`
   - Host-based 라우팅 지원
-- **Target Groups**:
-  - Backend: `cat-demo-backend-tg` (포트 80, Health check: `/`)
+- **Target Groups** (동적 포트 설정 가능):
+  - Backend: 포트 **8080** (Health check: `traffic-port`)
     - Domain: `api-board.go-to-learn.net`
-  - Frontend: `cat-demo-frontend-tg` (포트 80, Health check: `/`)
+    - 포트 변경 가능: `terraform.tfvars`에서 `backend_port` 설정
+  - Frontend: 포트 **3000** (Health check: `traffic-port`)
     - Domain: `board.go-to-learn.net`
+    - 포트 변경 가능: `terraform.tfvars`에서 `frontend_port` 설정
 - **ACM 인증서 (ap-northeast-2)**: `*.go-to-learn.net` (ALB HTTPS용)
+- **무중단 배포**: Target group lifecycle 설정으로 포트 변경 시에도 서비스 중단 없음
 
 ### CloudFront (비활성화됨)
 - **배포 여부**: `create_cloudfront = false` (현재 비활성화)
@@ -367,6 +370,46 @@ mysql -h <RDS_ENDPOINT> -u admin -p
 - **IAM Roles**: Task Execution Role, Task Role
 - **WAF**: CloudFront용 Web Application Firewall (선택사항)
 - **Bastion Host**: Private 리소스 안전 접근 (선택사항)
+
+## 최근 변경사항
+
+### 2025-11-20: ALB Target Group 동적 포트 설정 기능 추가
+
+#### 변경 내용
+1. **ALB 모듈 개선**
+   - `backend_port`, `frontend_port` 변수 추가
+   - Target group 포트를 `terraform.tfvars`에서 동적으로 설정 가능
+   - Health check 포트를 `traffic-port`로 변경하여 자동으로 타겟 포트 추적
+
+2. **무중단 배포 지원**
+   - Target group에 `create_before_destroy` lifecycle 추가
+   - 포트 변경 시에도 서비스 중단 없이 새 target group 생성 후 교체
+   - `name_prefix` 사용으로 자동 이름 생성
+
+3. **포트 설정 변경**
+   - Backend: 80 → **8080**
+   - Frontend: 80 → **3000**
+
+#### 사용 방법
+`terraform.tfvars`에서 포트 설정:
+```hcl
+backend_port  = 8080
+frontend_port = 3000
+```
+
+포트 변경 후 배포:
+```bash
+# Terraform 적용
+terraform apply
+
+# 변경사항 S3에 업로드
+./scripts/sync-tfvars.sh upload
+```
+
+#### 주의사항
+- ECS Task Definition의 컨테이너 포트도 동일하게 설정 필요
+- 포트 변경 시 기존 ECS 서비스는 새 target group으로 자동 전환
+- GitHub Actions 워크플로우는 S3에서 자동으로 최신 tfvars를 다운로드
 
 ## 사용 방법
 

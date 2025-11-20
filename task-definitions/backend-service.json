@@ -1,0 +1,49 @@
+{
+  "cluster": "cat-demo-cluster",
+  "serviceName": "cat-demo-backend-service",
+  "taskDefinition": "cat-demo-backend:2",
+  "desiredCount": 1,
+  "capacityProviderStrategy": [
+    {
+      "capacityProvider": "FARGATE_SPOT",
+      "weight": 1,
+      "base": 0
+    }
+  ],
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": [
+        "subnet-0a65a581e3b525d43",
+        "subnet-0af11ec39cc282e8d"
+      ],
+      "securityGroups": [
+        "sg-03d32807a168cbf70"
+      ],
+      "assignPublicIp": "DISABLED"
+    }
+  },
+  "loadBalancers": [
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-tg/b031122c44a3f2a1",
+      "containerName": "backend",
+      "containerPort": 5678
+    }
+  ],
+  "healthCheckGracePeriodSeconds": 60,
+  "deploymentConfiguration": {
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 100
+  },
+  "enableECSManagedTags": true,
+  "propagateTags": "SERVICE",
+  "tags": [
+    {
+      "key": "Environment",
+      "value": "demo"
+    },
+    {
+      "key": "Project",
+      "value": "cat-demo"
+    }
+  ]
+}
