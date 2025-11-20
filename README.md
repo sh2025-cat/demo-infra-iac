@@ -318,13 +318,21 @@ Terraform으로 배포되는 AWS 리소스:
 - **ALB**: HTTP(80) + HTTPS(443)
   - DNS: `cat-demo-alb-*.ap-northeast-2.elb.amazonaws.com`
   - Host-based 라우팅 지원
-- **Target Groups** (동적 포트 설정 가능):
-  - Backend: 포트 **8080** (Health check: `traffic-port`)
+- **Target Groups** (Blue/Green 배포 지원):
+  - **Backend Blue/Green**: 포트 **8080** (Health check: `traffic-port`)
     - Domain: `api-board.go-to-learn.net`
-    - 포트 변경 가능: `terraform.tfvars`에서 `backend_port` 설정
-  - Frontend: 포트 **3000** (Health check: `traffic-port`)
+    - Blue TG: `beb-*` (현재 활성)
+    - Green TG: `beg-*` (배포 대기)
+  - **Frontend Blue/Green**: 포트 **3000** (Health check: `traffic-port`)
     - Domain: `board.go-to-learn.net`
-    - 포트 변경 가능: `terraform.tfvars`에서 `frontend_port` 설정
+    - Blue TG: `feb-*` (현재 활성)
+    - Green TG: `feg-*` (배포 대기)
+  - 포트 변경 가능: `terraform.tfvars`에서 `backend_port`, `frontend_port` 설정
+- **Blue/Green 배포**:
+  - 각 서비스당 Blue, Green 타겟 그룹 2개씩 자동 생성
+  - 기본적으로 Blue 타겟 그룹으로 트래픽 라우팅
+  - 무중단 배포: Green에 새 버전 배포 → 헬스체크 확인 → 리스너 규칙 전환
+  - 즉시 롤백 가능: Blue ↔ Green 전환
 - **ACM 인증서 (ap-northeast-2)**: `*.go-to-learn.net` (ALB HTTPS용)
 - **무중단 배포**: Target group lifecycle 설정으로 포트 변경 시에도 서비스 중단 없음
 
@@ -373,7 +381,52 @@ mysql -h <RDS_ENDPOINT> -u admin -p
 
 ## 최근 변경사항
 
-### 2025-11-20: ALB Target Group 동적 포트 설정 기능 추가
+### 2025-11-20 (2): Blue/Green 배포를 위한 Target Group 구조 개선
+
+#### 변경 내용
+1. **Blue/Green Target Group 생성**
+   - Backend와 Frontend 각각 Blue, Green 타겟 그룹 2개씩 생성 (총 4개)
+   - Blue TG: 현재 프로덕션 트래픽 처리
+   - Green TG: 새 버전 배포 및 테스트용
+
+2. **타겟 그룹 네이밍**
+   - Backend Blue: `beb-*`
+   - Backend Green: `beg-*`
+   - Frontend Blue: `feb-*`
+   - Frontend Green: `feg-*`
+   - 각 타겟 그룹에 Environment 태그 추가 (blue/green)
+
+3. **리스너 규칙 설정**
+   - 기본적으로 Blue 타겟 그룹으로 트래픽 라우팅
+   - Blue ↔ Green 전환을 통한 무중단 배포 지원
+
+#### Blue/Green 배포 프로세스
+```bash
+# 1. Green 타겟 그룹에 새 버전 배포
+aws ecs create-service --target-group-arn <GREEN_TG_ARN> ...
+
+# 2. Green 타겟 헬스 체크 확인
+aws elbv2 describe-target-health --target-group-arn <GREEN_TG_ARN>
+
+# 3. 리스너 규칙을 Green으로 전환 (트래픽 스위칭)
+aws elbv2 modify-listener --listener-arn <LISTENER_ARN> \
+  --default-actions Type=forward,TargetGroupArn=<GREEN_TG_ARN>
+
+# 4. 문제 발생 시 즉시 Blue로 롤백
+aws elbv2 modify-listener --listener-arn <LISTENER_ARN> \
+  --default-actions Type=forward,TargetGroupArn=<BLUE_TG_ARN>
+```
+
+#### 타겟 그룹 ARN 확인
+```bash
+# Blue/Green 타겟 그룹 ARN 출력
+terraform output backend_blue_target_group_arn
+terraform output backend_green_target_group_arn
+terraform output frontend_blue_target_group_arn
+terraform output frontend_green_target_group_arn
+```
+
+### 2025-11-20 (1): ALB Target Group 동적 포트 설정 기능 추가
 
 #### 변경 내용
 1. **ALB 모듈 개선**

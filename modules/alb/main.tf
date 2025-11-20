@@ -19,12 +19,12 @@ resource "aws_lb" "main" {
 }
 
 # ===========================================
-# Target Groups
+# Target Groups - Blue/Green Deployment
 # ===========================================
 
-# Backend Target Group
-resource "aws_lb_target_group" "backend" {
-  name_prefix          = "be-"
+# Backend Blue Target Group
+resource "aws_lb_target_group" "backend_blue" {
+  name_prefix          = "beb-"
   port                 = var.backend_port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -48,13 +48,45 @@ resource "aws_lb_target_group" "backend" {
   }
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-backend-tg"
+    Name        = "${var.name_prefix}-backend-blue-tg"
+    Environment = "blue"
   })
 }
 
-# Frontend Target Group
-resource "aws_lb_target_group" "frontend" {
-  name_prefix          = "fe-"
+# Backend Green Target Group
+resource "aws_lb_target_group" "backend_green" {
+  name_prefix          = "beg-"
+  port                 = var.backend_port
+  protocol             = "HTTP"
+  vpc_id               = var.vpc_id
+  target_type          = "ip"
+  deregistration_delay = 30
+
+  health_check {
+    enabled             = true
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 5
+    interval            = 30
+    path                = "/"
+    matcher             = "200"
+    protocol            = "HTTP"
+    port                = "traffic-port"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = merge(var.tags, {
+    Name        = "${var.name_prefix}-backend-green-tg"
+    Environment = "green"
+  })
+}
+
+# Frontend Blue Target Group
+resource "aws_lb_target_group" "frontend_blue" {
+  name_prefix          = "feb-"
   port                 = var.frontend_port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -78,7 +110,39 @@ resource "aws_lb_target_group" "frontend" {
   }
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-frontend-tg"
+    Name        = "${var.name_prefix}-frontend-blue-tg"
+    Environment = "blue"
+  })
+}
+
+# Frontend Green Target Group
+resource "aws_lb_target_group" "frontend_green" {
+  name_prefix          = "feg-"
+  port                 = var.frontend_port
+  protocol             = "HTTP"
+  vpc_id               = var.vpc_id
+  target_type          = "ip"
+  deregistration_delay = 30
+
+  health_check {
+    enabled             = true
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 5
+    interval            = 30
+    path                = "/"
+    matcher             = "200"
+    protocol            = "HTTP"
+    port                = "traffic-port"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = merge(var.tags, {
+    Name        = "${var.name_prefix}-frontend-green-tg"
+    Environment = "green"
   })
 }
 
@@ -103,14 +167,14 @@ resource "aws_lb_listener" "http" {
   tags = var.tags
 }
 
-# Backend routing rule (HTTP)
+# Backend routing rule (HTTP) - Points to Blue by default
 resource "aws_lb_listener_rule" "backend_http" {
   listener_arn = aws_lb_listener.http.arn
   priority     = 100
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.backend.arn
+    target_group_arn = aws_lb_target_group.backend_blue.arn
   }
 
   condition {
@@ -122,14 +186,14 @@ resource "aws_lb_listener_rule" "backend_http" {
   tags = var.tags
 }
 
-# Frontend routing rule (HTTP)
+# Frontend routing rule (HTTP) - Points to Blue by default
 resource "aws_lb_listener_rule" "frontend_http" {
   listener_arn = aws_lb_listener.http.arn
   priority     = 200
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.frontend.arn
+    target_group_arn = aws_lb_target_group.frontend_blue.arn
   }
 
   condition {
@@ -166,7 +230,7 @@ resource "aws_lb_listener" "https" {
   tags = var.tags
 }
 
-# Backend routing rule (HTTPS)
+# Backend routing rule (HTTPS) - Points to Blue by default
 resource "aws_lb_listener_rule" "backend_https" {
   count = var.certificate_arn != "" ? 1 : 0
 
@@ -175,7 +239,7 @@ resource "aws_lb_listener_rule" "backend_https" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.backend.arn
+    target_group_arn = aws_lb_target_group.backend_blue.arn
   }
 
   condition {
@@ -187,7 +251,7 @@ resource "aws_lb_listener_rule" "backend_https" {
   tags = var.tags
 }
 
-# Frontend routing rule (HTTPS)
+# Frontend routing rule (HTTPS) - Points to Blue by default
 resource "aws_lb_listener_rule" "frontend_https" {
   count = var.certificate_arn != "" ? 1 : 0
 
@@ -196,7 +260,7 @@ resource "aws_lb_listener_rule" "frontend_https" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.frontend.arn
+    target_group_arn = aws_lb_target_group.frontend_blue.arn
   }
 
   condition {
