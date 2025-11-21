@@ -137,6 +137,20 @@ output "rds_master_username" {
 }
 
 # ===========================================
+# Secrets Manager Outputs
+# ===========================================
+
+output "database_secret_arn" {
+  description = "ARN of the database credentials secret"
+  value       = var.create_rds ? module.secrets_manager[0].database_secret_arn : null
+}
+
+output "database_secret_name" {
+  description = "Name of the database credentials secret"
+  value       = var.create_rds ? module.secrets_manager[0].database_secret_name : null
+}
+
+# ===========================================
 # CloudFront Outputs
 # ===========================================
 

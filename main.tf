@@ -130,6 +130,27 @@ module "rds" {
 }
 
 # ===========================================
+# Secrets Manager Module
+# ===========================================
+
+module "secrets_manager" {
+  source = "./modules/secrets-manager"
+  count  = var.create_rds ? 1 : 0
+
+  name_prefix = var.project_name
+  db_host     = module.rds[0].db_instance_address
+  db_port     = tostring(module.rds[0].db_instance_port)
+  db_username = var.rds_master_username
+  db_password = var.rds_master_password
+  db_name     = var.rds_database_name
+
+  tags = {
+    Environment = var.environment
+    Project     = "Softbank2025-Cat"
+  }
+}
+
+# ===========================================
 # WAF for CloudFront Module
 # ===========================================
 
