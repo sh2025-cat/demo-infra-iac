@@ -76,3 +76,14 @@ output "https_listener_arn" {
   description = "ARN of the HTTPS listener (if created)"
   value       = var.certificate_arn != "" ? aws_lb_listener.https[0].arn : null
 }
+
+# Test Listeners for Green Deployment (HTTPS Only)
+output "backend_https_test_listener_arn" {
+  description = "ARN of the Backend HTTPS test listener (port 18443)"
+  value       = var.certificate_arn != "" ? aws_lb_listener.backend_https_test[0].arn : null
+}
+
+output "frontend_https_test_listener_arn" {
+  description = "ARN of the Frontend HTTPS test listener (port 13443)"
+  value       = var.certificate_arn != "" ? aws_lb_listener.frontend_https_test[0].arn : null
+}

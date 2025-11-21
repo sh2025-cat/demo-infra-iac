@@ -7,8 +7,9 @@ resource "aws_security_group" "alb" {
   description = "Security group for Application Load Balancer"
   vpc_id      = var.vpc_id
 
+  # Production Listeners
   ingress {
-    description = "HTTP from anywhere"
+    description = "HTTP from anywhere (Production)"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -16,9 +17,27 @@ resource "aws_security_group" "alb" {
   }
 
   ingress {
-    description = "HTTPS from anywhere"
+    description = "HTTPS from anywhere (Production)"
     from_port   = 443
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Backend HTTPS Test Listener
+  ingress {
+    description = "Backend HTTPS Test (Green)"
+    from_port   = 18443
+    to_port     = 18443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Frontend HTTPS Test Listener
+  ingress {
+    description = "Frontend HTTPS Test (Green)"
+    from_port   = 13443
+    to_port     = 13443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

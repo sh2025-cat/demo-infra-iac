@@ -22,9 +22,9 @@ resource "aws_lb" "main" {
 # Target Groups - Blue/Green Deployment
 # ===========================================
 
-# Backend Blue Target Group
+# Backend Blue Target Group (Production)
 resource "aws_lb_target_group" "backend_blue" {
-  name_prefix          = "beb-"
+  name                 = "${var.name_prefix}-backend-blue-tg"
   port                 = var.backend_port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -50,12 +50,13 @@ resource "aws_lb_target_group" "backend_blue" {
   tags = merge(var.tags, {
     Name        = "${var.name_prefix}-backend-blue-tg"
     Environment = "blue"
+    Purpose     = "production"
   })
 }
 
-# Backend Green Target Group
+# Backend Green Target Group (Testing/Staging)
 resource "aws_lb_target_group" "backend_green" {
-  name_prefix          = "beg-"
+  name                 = "${var.name_prefix}-backend-green-tg"
   port                 = var.backend_port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -81,12 +82,13 @@ resource "aws_lb_target_group" "backend_green" {
   tags = merge(var.tags, {
     Name        = "${var.name_prefix}-backend-green-tg"
     Environment = "green"
+    Purpose     = "testing"
   })
 }
 
-# Frontend Blue Target Group
+# Frontend Blue Target Group (Production)
 resource "aws_lb_target_group" "frontend_blue" {
-  name_prefix          = "feb-"
+  name                 = "${var.name_prefix}-frontend-blue-tg"
   port                 = var.frontend_port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -112,12 +114,13 @@ resource "aws_lb_target_group" "frontend_blue" {
   tags = merge(var.tags, {
     Name        = "${var.name_prefix}-frontend-blue-tg"
     Environment = "blue"
+    Purpose     = "production"
   })
 }
 
-# Frontend Green Target Group
+# Frontend Green Target Group (Testing/Staging)
 resource "aws_lb_target_group" "frontend_green" {
-  name_prefix          = "feg-"
+  name                 = "${var.name_prefix}-frontend-green-tg"
   port                 = var.frontend_port
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
@@ -143,11 +146,12 @@ resource "aws_lb_target_group" "frontend_green" {
   tags = merge(var.tags, {
     Name        = "${var.name_prefix}-frontend-green-tg"
     Environment = "green"
+    Purpose     = "testing"
   })
 }
 
 # ===========================================
-# HTTP Listener with Host-based Routing
+# HTTP Listener - Redirects to HTTPS
 # ===========================================
 
 resource "aws_lb_listener" "http" {
@@ -156,49 +160,11 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Not Found"
-      status_code  = "404"
-    }
-  }
-
-  tags = var.tags
-}
-
-# Backend routing rule (HTTP) - Points to Blue by default
-resource "aws_lb_listener_rule" "backend_http" {
-  listener_arn = aws_lb_listener.http.arn
-  priority     = 100
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.backend_blue.arn
-  }
-
-  condition {
-    host_header {
-      values = [var.backend_domain]
-    }
-  }
-
-  tags = var.tags
-}
-
-# Frontend routing rule (HTTP) - Points to Blue by default
-resource "aws_lb_listener_rule" "frontend_http" {
-  listener_arn = aws_lb_listener.http.arn
-  priority     = 200
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.frontend_blue.arn
-  }
-
-  condition {
-    host_header {
-      values = [var.frontend_domain]
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
     }
   }
 
@@ -206,7 +172,7 @@ resource "aws_lb_listener_rule" "frontend_http" {
 }
 
 # ===========================================
-# HTTPS Listener with Host-based Routing (Optional)
+# HTTPS Listener with Host-based Routing (Production)
 # ===========================================
 
 resource "aws_lb_listener" "https" {
@@ -271,3 +237,53 @@ resource "aws_lb_listener_rule" "frontend_https" {
 
   tags = var.tags
 }
+# ===========================================
+# Testing Listeners for Green Deployment (HTTPS Only)
+# ===========================================
+
+# Backend HTTPS Test Listener (Port 18443) - Points to Backend Green
+resource "aws_lb_listener" "backend_https_test" {
+  count = var.certificate_arn != "" ? 1 : 0
+
+  load_balancer_arn = aws_lb.main.arn
+  port              = 18443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.backend_green.arn
+  }
+
+  tags = merge(var.tags, {
+    Name        = "${var.name_prefix}-backend-https-test-listener"
+    Environment = "green"
+    Purpose     = "testing"
+    Service     = "backend"
+  })
+}
+
+# Frontend HTTPS Test Listener (Port 13443) - Points to Frontend Green
+resource "aws_lb_listener" "frontend_https_test" {
+  count = var.certificate_arn != "" ? 1 : 0
+
+  load_balancer_arn = aws_lb.main.arn
+  port              = 13443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.frontend_green.arn
+  }
+
+  tags = merge(var.tags, {
+    Name        = "${var.name_prefix}-frontend-https-test-listener"
+    Environment = "green"
+    Purpose     = "testing"
+    Service     = "frontend"
+  })
+}
+
