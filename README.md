@@ -61,6 +61,10 @@ Terraform을 사용한 Cat Demo 인프라 관리 프로젝트입니다.
 │   │   ├── outputs.tf
 │   │   ├── variables.tf
 │   │   └── versions.tf
+│   ├── secrets-manager/   # AWS Secrets Manager (DB 자격증명)
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
 │   └── security-groups/    # 보안 그룹
 │       ├── main.tf
 │       ├── outputs.tf
@@ -346,6 +350,15 @@ Terraform으로 배포되는 AWS 리소스:
 - CloudFront 비활성화로 인해 WAF도 함께 비활성화됨
 - 필요시 CloudFront와 함께 활성화 가능
 
+### Database (RDS MySQL)
+- **배포 여부**: `create_rds = true/false`로 제어
+- **엔진**: MySQL 8.0.39
+- **인스턴스**: `db.t3.micro`
+- **데이터베이스명**: `catdb`
+- **위치**: Private DB Subnet (외부 접근 불가)
+- **Endpoint**: `cat-demo-mysql.c7c64cakmi8h.ap-northeast-2.rds.amazonaws.com:3306`
+- **자격증명**: Secrets Manager에 저장 (`cat-demo/database/credentials`)
+
 ### Bastion Host (선택사항)
 - **배포 여부**: `create_bastion = true/false`로 제어
 - **위치**: Public Subnet (SSH 접근 가능)
@@ -378,6 +391,141 @@ mysql -h <RDS_ENDPOINT> -u admin -p
 - **IAM Roles**: Task Execution Role, Task Role
 - **WAF**: CloudFront용 Web Application Firewall (선택사항)
 - **Bastion Host**: Private 리소스 안전 접근 (선택사항)
+
+### Secrets Manager (데이터베이스 자격증명 관리)
+
+**목적**: 데이터베이스 비밀번호 등 민감한 정보를 안전하게 저장하고 ECS Task에 주입
+
+#### 저장된 정보
+- **Secret 이름**: `cat-demo/database/credentials`
+- **포함 내용**:
+  ```json
+  {
+    "host": "cat-demo-mysql.c7c64cakmi8h.ap-northeast-2.rds.amazonaws.com",
+    "port": "3306",
+    "username": "admin",
+    "password": "Cat2025Hackathon!",
+    "database": "catdb"
+  }
+  ```
+
+#### ECS Task Definition에서 사용
+
+Task Definition JSON에 `secrets` 필드를 추가하여 환경변수로 주입:
+
+```json
+{
+  "containerDefinitions": [
+    {
+      "name": "backend",
+      "secrets": [
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-2:277679348386:secret:cat-demo/database/credentials-XXXXXX:host::"
+        },
+        {
+          "name": "DB_PORT",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-2:277679348386:secret:cat-demo/database/credentials-XXXXXX:port::"
+        },
+        {
+          "name": "DB_USERNAME",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-2:277679348386:secret:cat-demo/database/credentials-XXXXXX:username::"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-2:277679348386:secret:cat-demo/database/credentials-XXXXXX:password::"
+        },
+        {
+          "name": "DB_NAME",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-2:277679348386:secret:cat-demo/database/credentials-XXXXXX:database::"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Spring Boot 애플리케이션 설정
+
+`application.yaml`에서 환경변수를 사용하여 데이터베이스 연결:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:catboard}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:1234}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+```
+
+**장점**:
+- 로컬 개발: 환경변수 없으면 기본값 사용 (localhost, root, 1234)
+- ECS 배포: Secrets Manager에서 자동 주입된 환경변수 사용
+
+#### Secret ARN 확인
+
+```bash
+# Terraform output으로 확인
+terraform output database_secret_arn
+terraform output database_secret_name
+
+# 또는 AWS CLI로 확인
+aws secretsmanager list-secrets --query 'SecretList[?Name==`cat-demo/database/credentials`]'
+```
+
+#### Secret 값 확인 (개발/디버깅용)
+
+```bash
+# Secret 전체 값 확인
+aws secretsmanager get-secret-value \
+  --secret-id cat-demo/database/credentials \
+  --query 'SecretString' --output text | jq
+
+# 특정 필드만 확인
+aws secretsmanager get-secret-value \
+  --secret-id cat-demo/database/credentials \
+  --query 'SecretString' --output text | jq -r '.password'
+```
+
+#### IAM 권한 요구사항
+
+ECS Task Execution Role에 다음 권한이 자동으로 추가됨:
+- `secretsmanager:GetSecretValue` - Secret 값 읽기
+- `kms:Decrypt` - KMS 암호화된 Secret 복호화
+
+이 권한은 `modules/ecs/iam.tf`에서 Task Execution Role에 자동으로 부여됩니다.
+
+#### Secret 업데이트
+
+```bash
+# Secret 값 업데이트 (Terraform으로)
+# 1. terraform.tfvars에서 rds_master_password 변경
+# 2. terraform apply 실행
+
+# Secret 값 업데이트 (AWS CLI로)
+aws secretsmanager update-secret \
+  --secret-id cat-demo/database/credentials \
+  --secret-string '{
+    "host": "cat-demo-mysql.c7c64cakmi8h.ap-northeast-2.rds.amazonaws.com",
+    "port": "3306",
+    "username": "admin",
+    "password": "NEW_PASSWORD",
+    "database": "catdb"
+  }'
+
+# ECS Service 재시작하여 새 Secret 적용
+aws ecs update-service \
+  --cluster cat-demo-cluster \
+  --service cat-demo-backend-service \
+  --force-new-deployment
+```
+
+#### 보안 모범 사례
+
+1. **Secret 로테이션**: 주기적으로 비밀번호 변경
+2. **최소 권한 원칙**: Task Role에는 필요한 Secret만 접근 가능하도록 제한
+3. **감사 로깅**: CloudTrail로 Secret 접근 기록 모니터링
+4. **암호화**: Secrets Manager는 기본적으로 AWS KMS로 암호화됨
 
 ## 최근 변경사항
 
