@@ -147,21 +147,11 @@ resource "aws_iam_role_policy" "ecs_task_role_policy" {
           "ecs:UpdateService",
           "ecs:DeleteService",
           "ecs:DescribeServices",
-          "ecs:ListServices"
+          "ecs:ListServices",
+          "ecs:DescribeClusters",
+          "ecs:ListClusters"
         ]
         Resource = "*"
-        Condition = {
-          ArnEquals = {
-            "ecs:cluster" = "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:cluster/${var.cluster_name}"
-          }
-        }
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "ecs:DescribeClusters"
-        ]
-        Resource = "arn:aws:ecs:${var.aws_region}:${var.aws_account_id}:cluster/${var.cluster_name}"
       },
       {
         Effect = "Allow"
