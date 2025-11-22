@@ -123,3 +123,17 @@ resource "aws_route_table_association" "db" {
   subnet_id      = each.value.id
   route_table_id = aws_route_table.db.id
 }
+
+# --- S3 Gateway Endpoint (무료) ---
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${var.region}.s3"
+  vpc_endpoint_type = "Gateway"
+
+  route_table_ids = [
+    aws_route_table.app.id,
+    aws_route_table.db.id
+  ]
+
+  tags = { Name = "${var.name}-s3-endpoint" }
+}

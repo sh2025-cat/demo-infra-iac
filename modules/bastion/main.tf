@@ -43,7 +43,8 @@ data "aws_ami" "amazon_linux_2" {
 
 # Bastion Host EC2 Instance
 resource "aws_instance" "bastion" {
-  ami                         = data.aws_ami.amazon_linux_2.id
+  # AMI 변경으로 인한 재생성 방지 - 현재 사용 중인 AMI 고정
+  ami                         = var.ami_id != "" ? var.ami_id : data.aws_ami.amazon_linux_2.id
   instance_type               = var.instance_type
   key_name                    = aws_key_pair.bastion.key_name
   subnet_id                   = var.public_subnet_id

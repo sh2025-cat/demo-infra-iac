@@ -1,0 +1,47 @@
+{
+  "family": "cat-demo-frontend",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::277679348386:role/cat-demo-cluster-task-execution-role",
+  "taskRoleArn": "arn:aws:iam::277679348386:role/cat-demo-cluster-task-role",
+  "containerDefinitions": [
+    {
+      "name": "frontend",
+      "image": "277679348386.dkr.ecr.ap-northeast-2.amazonaws.com/cat-demo-frontend:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "NEXT_PUBLIC_API_URL",
+          "value": "https://api.nyanpan.com"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/cat-demo-frontend",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ]
+}

@@ -1,0 +1,197 @@
+{
+    "services": [
+        {
+            "serviceArn": "arn:aws:ecs:ap-northeast-2:277679348386:service/cat-demo-cluster/cat-demo-frontend-service",
+            "serviceName": "cat-demo-frontend-service",
+            "clusterArn": "arn:aws:ecs:ap-northeast-2:277679348386:cluster/cat-demo-cluster",
+            "loadBalancers": [
+                {
+                    "targetGroupArn": "arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-frontend-blue-tg/79f926479c3a0186",
+                    "containerName": "frontend",
+                    "containerPort": 3000
+                }
+            ],
+            "serviceRegistries": [],
+            "status": "ACTIVE",
+            "desiredCount": 1,
+            "runningCount": 2,
+            "pendingCount": 0,
+            "launchType": "FARGATE",
+            "platformVersion": "1.4.0",
+            "platformFamily": "Linux",
+            "taskDefinition": "arn:aws:ecs:ap-northeast-2:277679348386:task-definition/cat-demo-frontend:1",
+            "deploymentConfiguration": {
+                "deploymentCircuitBreaker": {
+                    "enable": true,
+                    "rollback": true
+                },
+                "maximumPercent": 200,
+                "minimumHealthyPercent": 100,
+                "strategy": "BLUE_GREEN",
+                "bakeTimeInMinutes": 10
+            },
+            "deployments": [
+                {
+                    "id": "ecs-svc/0287772188834906504",
+                    "status": "PRIMARY",
+                    "taskDefinition": "arn:aws:ecs:ap-northeast-2:277679348386:task-definition/cat-demo-frontend:1",
+                    "desiredCount": 1,
+                    "pendingCount": 0,
+                    "runningCount": 1,
+                    "failedTasks": 0,
+                    "createdAt": "2025-11-22T16:11:50.216000+09:00",
+                    "updatedAt": "2025-11-22T16:45:02.253000+09:00",
+                    "launchType": "FARGATE",
+                    "platformVersion": "1.4.0",
+                    "platformFamily": "Linux",
+                    "networkConfiguration": {
+                        "awsvpcConfiguration": {
+                            "subnets": [
+                                "subnet-0a65a581e3b525d43",
+                                "subnet-0af11ec39cc282e8d"
+                            ],
+                            "securityGroups": [
+                                "sg-03d32807a168cbf70"
+                            ],
+                            "assignPublicIp": "DISABLED"
+                        }
+                    },
+                    "rolloutState": "IN_PROGRESS",
+                    "rolloutStateReason": "ECS deployment failed Service deployment rolled back because TEST_TRAFFIC_SHIFT lifecycle hook(s) failed. User: arn:aws:sts::277679348386:assumed-role/cat-demo-cluster-service-role/ECSNetworkingWithELB is not authorized to perform: elasticloadbalancing:ModifyListener on resource: arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:listener/app/cat-demo-alb/9d92f958ad5f6db9/e9129bebebc2ac6b because no identity-based policy allows the elasticloadbalancing:ModifyListener action (Service: ElasticLoadBalancingV2, Status Code: 403, Request ID: 10980285-3d3f-48e8-93e9-fff8cfbfcb17) (SDK Attempt Count: 1)."
+                },
+                {
+                    "id": "ecs-svc/6992574951775978812",
+                    "status": "ACTIVE",
+                    "taskDefinition": "arn:aws:ecs:ap-northeast-2:277679348386:task-definition/cat-demo-frontend:1",
+                    "desiredCount": 1,
+                    "pendingCount": 0,
+                    "runningCount": 1,
+                    "failedTasks": 0,
+                    "createdAt": "2025-11-22T16:42:29.071000+09:00",
+                    "updatedAt": "2025-11-22T16:45:00.274000+09:00",
+                    "launchType": "FARGATE",
+                    "platformVersion": "1.4.0",
+                    "platformFamily": "Linux",
+                    "networkConfiguration": {
+                        "awsvpcConfiguration": {
+                            "subnets": [
+                                "subnet-0a65a581e3b525d43",
+                                "subnet-0af11ec39cc282e8d"
+                            ],
+                            "securityGroups": [
+                                "sg-03d32807a168cbf70"
+                            ],
+                            "assignPublicIp": "DISABLED"
+                        }
+                    },
+                    "rolloutState": "FAILED",
+                    "rolloutStateReason": "ECS deployment failed Service deployment rolled back because TEST_TRAFFIC_SHIFT lifecycle hook(s) failed. User: arn:aws:sts::277679348386:assumed-role/cat-demo-cluster-service-role/ECSNetworkingWithELB is not authorized to perform: elasticloadbalancing:ModifyListener on resource: arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:listener/app/cat-demo-alb/9d92f958ad5f6db9/e9129bebebc2ac6b because no identity-based policy allows the elasticloadbalancing:ModifyListener action (Service: ElasticLoadBalancingV2, Status Code: 403, Request ID: 10980285-3d3f-48e8-93e9-fff8cfbfcb17) (SDK Attempt Count: 1)."
+                }
+            ],
+            "roleArn": "arn:aws:iam::277679348386:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+            "events": [
+                {
+                    "id": "f20f476c-db6f-4bab-a9db-24cb6bd2880a",
+                    "createdAt": "2025-11-22T16:45:00.288000+09:00",
+                    "message": "(service cat-demo-frontend-service) rolling back to deployment ecs-svc/0287772188834906504."
+                },
+                {
+                    "id": "211ae566-f0f7-4346-9176-518d532815e0",
+                    "createdAt": "2025-11-22T16:45:00.287000+09:00",
+                    "message": "(service cat-demo-frontend-service) (deployment ecs-svc/6992574951775978812) deployment failed: Service deployment rolled back because TEST_TRAFFIC_SHIFT lifecycle hook(s) failed. User: arn:aws:sts::277679348386:assumed-role/cat-demo-cluster-service-role/ECSNetworkingWithELB is not authorized to perform: elasticloadbalancing:ModifyListener on resource: arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:listener/app/cat-demo-alb/9d92f958ad5f6db9/e9129bebebc2ac6b because no identity-based policy allows the elasticloadbalancing:ModifyListener action (Service: ElasticLoadBalancingV2, Status Code: 403, Request ID: 10980285-3d3f-48e8-93e9-fff8cfbfcb17) (SDK Attempt Count: 1)."
+                },
+                {
+                    "id": "89787871-c164-43ae-9900-19a5995e1951",
+                    "createdAt": "2025-11-22T16:43:58.614000+09:00",
+                    "message": "(service cat-demo-frontend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/test1/ab44f139608d0372)"
+                },
+                {
+                    "id": "25218bf2-2263-4c95-8c8d-274824d5b909",
+                    "createdAt": "2025-11-22T16:43:26.679000+09:00",
+                    "message": "(service cat-demo-frontend-service) has started 1 tasks: (task 72c4bb98c1d94479831a2671dee99b14)."
+                },
+                {
+                    "id": "44fefa21-a124-4b61-8151-0b5a3774ac80",
+                    "createdAt": "2025-11-22T16:14:30.212000+09:00",
+                    "message": "(service cat-demo-frontend-service) has reached a steady state."
+                },
+                {
+                    "id": "6cd59f75-7546-44ab-b808-ff528305d660",
+                    "createdAt": "2025-11-22T16:14:30.211000+09:00",
+                    "message": "(service cat-demo-frontend-service) (deployment ecs-svc/0287772188834906504) deployment completed."
+                },
+                {
+                    "id": "ab07299b-2365-4faf-ac4e-881ba03fd5e8",
+                    "createdAt": "2025-11-22T16:13:36.001000+09:00",
+                    "message": "(service cat-demo-frontend-service, taskSet ecs-svc/4366025999116785815) has begun draining connections on 1 tasks."
+                },
+                {
+                    "id": "6485a40d-6de9-4297-8e42-6a0f4fffb5ce",
+                    "createdAt": "2025-11-22T16:13:35.996000+09:00",
+                    "message": "(service cat-demo-frontend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-frontend-blue-tg/79f926479c3a0186)"
+                },
+                {
+                    "id": "b221de6f-3936-4693-8569-72ea68b44c8a",
+                    "createdAt": "2025-11-22T16:13:25.340000+09:00",
+                    "message": "(service cat-demo-frontend-service) has stopped 1 running tasks: (task d79726c941d44e05aa3faa774c6702e2)."
+                },
+                {
+                    "id": "7631e80e-7814-4ca0-970b-eff6cfdf6095",
+                    "createdAt": "2025-11-22T16:12:54.033000+09:00",
+                    "message": "(service cat-demo-frontend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-frontend-blue-tg/79f926479c3a0186)"
+                },
+                {
+                    "id": "00d2a9e9-a70a-40f7-bdb4-b4dcd62b533d",
+                    "createdAt": "2025-11-22T16:12:22.222000+09:00",
+                    "message": "(service cat-demo-frontend-service) has started 1 tasks: (task d45f1a7729984d1383eb08517c84cb44)."
+                },
+                {
+                    "id": "2e9b6a2a-81aa-450a-b648-c9e9feefab9f",
+                    "createdAt": "2025-11-22T15:57:17.731000+09:00",
+                    "message": "(service cat-demo-frontend-service) has reached a steady state."
+                },
+                {
+                    "id": "67cb356f-7ace-413d-bc4d-008d01aa12f3",
+                    "createdAt": "2025-11-22T15:57:17.730000+09:00",
+                    "message": "(service cat-demo-frontend-service) (deployment ecs-svc/4366025999116785815) deployment completed."
+                },
+                {
+                    "id": "280caa9f-9f5f-4f41-86f6-ee0898740b9a",
+                    "createdAt": "2025-11-22T15:56:35.489000+09:00",
+                    "message": "(service cat-demo-frontend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-frontend-blue-tg/79f926479c3a0186)"
+                },
+                {
+                    "id": "f4843fcc-2346-4732-9f78-371ec6e4ae2a",
+                    "createdAt": "2025-11-22T15:56:04.018000+09:00",
+                    "message": "(service cat-demo-frontend-service) has started 1 tasks: (task d79726c941d44e05aa3faa774c6702e2)."
+                }
+            ],
+            "createdAt": "2025-11-22T15:55:34.773000+09:00",
+            "placementConstraints": [],
+            "placementStrategy": [],
+            "networkConfiguration": {
+                "awsvpcConfiguration": {
+                    "subnets": [
+                        "subnet-0a65a581e3b525d43",
+                        "subnet-0af11ec39cc282e8d"
+                    ],
+                    "securityGroups": [
+                        "sg-03d32807a168cbf70"
+                    ],
+                    "assignPublicIp": "DISABLED"
+                }
+            },
+            "healthCheckGracePeriodSeconds": 60,
+            "schedulingStrategy": "REPLICA",
+            "deploymentController": {
+                "type": "ECS"
+            },
+            "createdBy": "arn:aws:iam::277679348386:user/admin",
+            "enableECSManagedTags": false,
+            "propagateTags": "SERVICE",
+            "enableExecuteCommand": true,
+            "availabilityZoneRebalancing": "ENABLED"
+        }
+    ],
+    "failures": []
+}

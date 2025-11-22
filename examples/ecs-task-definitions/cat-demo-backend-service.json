@@ -1,0 +1,48 @@
+{
+  "cluster": "cat-demo-cluster",
+  "serviceName": "cat-demo-backend-service",
+  "taskDefinition": "cat-demo-backend",
+  "desiredCount": 1,
+  "launchType": "FARGATE",
+  "platformVersion": "LATEST",
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": [
+        "subnet-0a65a581e3b525d43",
+        "subnet-0af11ec39cc282e8d"
+      ],
+      "securityGroups": [
+        "sg-03d32807a168cbf70"
+      ],
+      "assignPublicIp": "DISABLED"
+    }
+  },
+  "loadBalancers": [
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0",
+      "containerName": "backend",
+      "containerPort": 8080
+    }
+  ],
+  "healthCheckGracePeriodSeconds": 120,
+  "deploymentConfiguration": {
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 100,
+    "deploymentCircuitBreaker": {
+      "enable": true,
+      "rollback": true
+    }
+  },
+  "enableExecuteCommand": true,
+  "propagateTags": "SERVICE",
+  "tags": [
+    {
+      "key": "Environment",
+      "value": "production"
+    },
+    {
+      "key": "Service",
+      "value": "backend"
+    }
+  ]
+}

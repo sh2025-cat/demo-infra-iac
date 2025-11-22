@@ -38,6 +38,17 @@ output "task_role_name" {
   value       = aws_iam_role.ecs_task_role.name
 }
 
+# ECS Service Role for Load Balancer
+output "service_role_arn" {
+  description = "ARN of the ECS service role for load balancer"
+  value       = aws_iam_role.ecs_service_role.arn
+}
+
+output "service_role_name" {
+  description = "Name of the ECS service role for load balancer"
+  value       = aws_iam_role.ecs_service_role.name
+}
+
 # CloudWatch Log Group
 output "log_group_name" {
   description = "Name of the CloudWatch log group"

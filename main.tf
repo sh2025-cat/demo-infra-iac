@@ -211,6 +211,7 @@ module "bastion" {
   allocate_eip      = var.bastion_allocate_eip
   private_key_path  = var.bastion_private_key_path
   root_volume_size  = var.bastion_root_volume_size
+  ami_id            = var.bastion_ami_id
 
   tags = {
     Environment = var.environment

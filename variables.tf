@@ -229,6 +229,12 @@ variable "bastion_root_volume_size" {
   default     = 8
 }
 
+variable "bastion_ami_id" {
+  description = "Specific AMI ID for Bastion Host (empty string to use latest Amazon Linux 2)"
+  type        = string
+  default     = "ami-0f810accf42b4af77"  # 현재 사용 중인 AMI 고정
+}
+
 variable "bastion_allowed_cidr_blocks" {
   description = "CIDR blocks allowed to SSH into Bastion"
   type        = list(string)

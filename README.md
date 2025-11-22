@@ -388,9 +388,60 @@ mysql -h <RDS_ENDPOINT> -u admin -p
 
 ### 보안
 - **Security Groups**: ALB용, ECS Tasks용, Bastion용
-- **IAM Roles**: Task Execution Role, Task Role
+- **IAM Roles**: Task Execution Role, Task Role, Service Role
 - **WAF**: CloudFront용 Web Application Firewall (선택사항)
 - **Bastion Host**: Private 리소스 안전 접근 (선택사항)
+
+### IAM Roles 상세
+
+ECS 운영을 위해 3가지 IAM Role이 자동으로 생성됩니다:
+
+#### 1. Task Execution Role (`cat-demo-cluster-task-execution-role`)
+ECS Agent가 태스크 시작 시 사용하는 역할
+
+| 권한 | 설명 |
+|------|------|
+| `ecr:GetAuthorizationToken` | ECR 인증 토큰 발급 |
+| `ecr:BatchCheckLayerAvailability` | ECR 이미지 레이어 확인 |
+| `ecr:GetDownloadUrlForLayer` | ECR 이미지 레이어 다운로드 |
+| `ecr:BatchGetImage` | ECR 이미지 가져오기 |
+| `logs:CreateLogStream` | CloudWatch 로그 스트림 생성 |
+| `logs:PutLogEvents` | CloudWatch 로그 기록 |
+| `secretsmanager:GetSecretValue` | Secrets Manager에서 시크릿 조회 |
+| `kms:Decrypt` | KMS 암호화된 시크릿 복호화 |
+
+#### 2. Task Role (`cat-demo-cluster-task-role`)
+컨테이너 내부 애플리케이션이 AWS 서비스에 접근할 때 사용하는 역할
+
+| 권한 | 설명 |
+|------|------|
+| `s3:GetObject`, `s3:PutObject` | S3 객체 읽기/쓰기 |
+| `dynamodb:GetItem`, `dynamodb:PutItem`, `dynamodb:Query`, `dynamodb:Scan` | DynamoDB 작업 |
+| `sqs:SendMessage`, `sqs:ReceiveMessage`, `sqs:DeleteMessage` | SQS 메시지 작업 |
+| `secretsmanager:GetSecretValue` | Secrets Manager 시크릿 조회 |
+
+#### 3. Service Role (`cat-demo-cluster-service-role`)
+ECS 서비스가 Load Balancer와 통신할 때 사용하는 역할
+
+| 권한 | 설명 |
+|------|------|
+| `elasticloadbalancing:RegisterTargets` | ALB Target Group에 타겟 등록 |
+| `elasticloadbalancing:DeregisterTargets` | ALB Target Group에서 타겟 해제 |
+| `elasticloadbalancing:Describe*` | Load Balancer 정보 조회 |
+| `ec2:Describe*` | EC2/ENI 정보 조회 |
+| `ec2:AuthorizeSecurityGroupIngress` | 보안 그룹 인바운드 규칙 추가 |
+
+#### IAM Role ARN 확인
+```bash
+# Task Execution Role
+terraform output ecs_task_execution_role_arn
+
+# Task Role
+terraform output ecs_task_role_arn
+
+# Service Role (Load Balancer용)
+terraform output ecs_service_role_arn
+```
 
 ### Secrets Manager (데이터베이스 자격증명 관리)
 

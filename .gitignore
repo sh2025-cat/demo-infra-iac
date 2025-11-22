@@ -52,8 +52,8 @@ id_rsa*
 .claude/
 CLAUDE.md
 
-# Docs
-docs/
+# Docs (Blue/Green deployment guide is tracked)
+# docs/
 
 # 파이썬 가상환경
 .venv

@@ -139,3 +139,65 @@ resource "aws_iam_role_policy" "ecs_task_role_policy" {
     ]
   })
 }
+
+# ===========================================
+# ECS Service Linked Role for Load Balancer
+# ===========================================
+# ECS 서비스가 ALB/NLB Target Group에 등록/해제하기 위한 역할
+
+resource "aws_iam_role" "ecs_service_role" {
+  name = "${var.cluster_name}-service-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = merge(var.tags, {
+    Name = "${var.cluster_name}-service-role"
+  })
+}
+
+# ECS Service Role Policy for Load Balancer (Blue/Green 배포 지원)
+resource "aws_iam_role_policy" "ecs_service_role_policy" {
+  name = "${var.cluster_name}-service-lb-policy"
+  role = aws_iam_role.ecs_service_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+          "elasticloadbalancing:DeregisterTargets",
+          "elasticloadbalancing:Describe*",
+          "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+          "elasticloadbalancing:RegisterTargets",
+          "elasticloadbalancing:ModifyListener",
+          "elasticloadbalancing:ModifyRule",
+          "elasticloadbalancing:ModifyTargetGroup",
+          "elasticloadbalancing:ModifyTargetGroupAttributes",
+          "elasticloadbalancing:SetRulePriorities"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ec2:Describe*",
+          "ec2:AuthorizeSecurityGroupIngress"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}

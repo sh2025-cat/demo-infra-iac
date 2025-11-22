@@ -33,3 +33,9 @@ variable "private_db_cidrs" {
   type        = list(string)
   default     = ["10.180.2.0/24", "10.180.3.0/24"]
 }
+
+variable "region" {
+  type        = string
+  description = "AWS region"
+  default     = "ap-northeast-2"
+}

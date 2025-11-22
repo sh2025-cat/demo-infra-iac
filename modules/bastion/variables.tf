@@ -46,3 +46,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "ami_id" {
+  description = "Specific AMI ID for Bastion Host (empty string to use latest Amazon Linux 2)"
+  type        = string
+  default     = ""
+}
