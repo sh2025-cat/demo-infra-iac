@@ -494,6 +494,26 @@ ECS Agent가 태스크 시작 시 사용하는 역할
 | `sqs:SendMessage`, `sqs:ReceiveMessage`, `sqs:DeleteMessage` | SQS 메시지 작업 |
 | `secretsmanager:GetSecretValue` | Secrets Manager 시크릿 조회 |
 
+**ECS 관리 권한** (cat-demo-cluster 한정):
+
+Backend API가 ECS Task 및 Service를 동적으로 생성/수정할 수 있도록 다음 권한이 추가되었습니다.
+
+| 권한 | 리소스 제한 | 설명 |
+|------|-------------|------|
+| `ecs:DescribeTasks`, `ecs:ListTasks` | cat-demo-cluster만 | Task 조회 |
+| `ecs:RunTask`, `ecs:StopTask` | cat-demo-cluster만 | Task 실행/중지 |
+| `ecs:CreateService`, `ecs:UpdateService`, `ecs:DeleteService` | cat-demo-cluster만 | Service 생성/수정/삭제 |
+| `ecs:DescribeServices`, `ecs:ListServices` | cat-demo-cluster만 | Service 조회 |
+| `ecs:DescribeClusters` | cat-demo-cluster만 | Cluster 정보 조회 |
+| `ecs:RegisterTaskDefinition`, `ecs:DeregisterTaskDefinition` | 모든 TaskDef | Task Definition 등록/해제 |
+| `ecs:DescribeTaskDefinition`, `ecs:ListTaskDefinitions` | 모든 TaskDef | Task Definition 조회 |
+| `iam:PassRole` | task-execution-role, task-role | ECS Task에 역할 전달 |
+
+**주의사항**:
+- ECS 관리 권한은 `cat-demo-cluster`에만 제한됨 (Condition으로 적용)
+- 다른 클러스터의 리소스에는 접근 불가
+- Task Definition은 계정 전체에서 공유되므로 리소스 제한 없음
+
 #### 3. Service Role (`cat-demo-cluster-service-role`)
 ECS 서비스가 Load Balancer와 통신할 때 사용하는 역할
 
