@@ -65,11 +65,18 @@ Terraform을 사용한 Cat Demo 인프라 관리 프로젝트입니다.
 │   │   ├── main.tf
 │   │   ├── outputs.tf
 │   │   └── variables.tf
-│   └── security-groups/    # 보안 그룹
+│   ├── security-groups/    # 보안 그룹
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── variables.tf
+│   │   └── versions.tf
+│   └── lambda-validator/   # Blue/Green 배포 검증 Lambda
 │       ├── main.tf
 │       ├── outputs.tf
-│       ├── variables.tf
-│       └── versions.tf
+│       └── variables.tf
+├── lambda/                 # Lambda 함수 소스 코드
+│   └── deployment-validator/
+│       └── index.py        # Backend 헬스체크 검증 Lambda
 ├── examples/               # 예시 파일
 │   ├── README.md
 │   ├── ecs-task-definitions/
@@ -391,6 +398,73 @@ mysql -h <RDS_ENDPOINT> -u admin -p
 - **IAM Roles**: Task Execution Role, Task Role, Service Role
 - **WAF**: CloudFront용 Web Application Firewall (선택사항)
 - **Bastion Host**: Private 리소스 안전 접근 (선택사항)
+
+### Lambda Deployment Validator
+
+ECS Blue/Green 배포 시 새 버전의 상태를 자동으로 검증하는 Lambda 함수입니다.
+
+#### 개요
+- **Function Name**: `cat-demo-deployment-validator`
+- **Runtime**: Python 3.11
+- **Timeout**: 30초
+- **용도**: POST_TEST_TRAFFIC_SHIFT lifecycle hook에서 Backend `/api/health` 검증
+
+#### 동작 방식
+```
+Blue/Green 배포 시작
+    ↓
+새 버전 Task → Test Target Group 등록
+    ↓
+Lambda 검증 실행 (POST_TEST_TRAFFIC_SHIFT)
+    ↓
+GET https://api-board.go-to-learn.net:18443/api/health
+    ↓
+┌─────────────────────────────────────┐
+│ 검증 조건:                           │
+│ - HTTP Status: 200                  │
+│ - Response Body: "UP" 포함           │
+└─────────────────────────────────────┘
+    ↓
+성공 → Bake Time 후 프로덕션 전환
+실패 → Exception 발생 → 자동 롤백
+```
+
+#### Lambda 환경변수
+| 변수 | 기본값 | 설명 |
+|------|--------|------|
+| `BACKEND_URL` | `https://api-board.go-to-learn.net` | Backend API URL |
+| `TEST_PORT` | `18443` | 테스트 리스너 포트 |
+
+#### Lambda 수동 테스트
+```bash
+# Lambda 실행 테스트
+aws lambda invoke \
+  --function-name cat-demo-deployment-validator \
+  --payload '{}' \
+  /tmp/response.json && cat /tmp/response.json | jq .
+
+# 성공 응답 예시
+{
+  "statusCode": 200,
+  "body": "{\"status\": \"PASS\", \"message\": \"Health check passed\"}"
+}
+
+# 실패 응답 예시 (Exception 발생)
+{
+  "errorMessage": "Health check failed: HTTP 503",
+  "errorType": "Exception"
+}
+```
+
+#### Lambda ARN 확인
+```bash
+terraform output lambda_validator_function_arn
+terraform output lambda_validator_function_name
+```
+
+#### 소스 코드 위치
+- Lambda 코드: `lambda/deployment-validator/index.py`
+- Terraform 모듈: `modules/lambda-validator/`
 
 ### IAM Roles 상세
 
