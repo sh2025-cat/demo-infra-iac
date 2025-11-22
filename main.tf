@@ -36,6 +36,8 @@ module "security_groups" {
 # ECS Cluster Module
 # ===========================================
 
+data "aws_caller_identity" "current" {}
+
 module "ecs" {
   source = "./modules/ecs"
 
@@ -43,6 +45,8 @@ module "ecs" {
   enable_container_insights = var.enable_container_insights
   log_retention_days        = var.ecs_log_retention_days
   use_fargate_spot          = var.use_fargate_spot
+  aws_region                = "ap-northeast-2"
+  aws_account_id            = data.aws_caller_identity.current.account_id
 
   tags = {
     Environment = var.environment

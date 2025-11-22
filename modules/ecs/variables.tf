@@ -31,3 +31,15 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "aws_region" {
+  description = "AWS region for ECS cluster"
+  type        = string
+  default     = "ap-northeast-2"
+}
+
+variable "aws_account_id" {
+  description = "AWS account ID for ECS cluster ARN"
+  type        = string
+  default     = ""
+}
