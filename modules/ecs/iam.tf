@@ -197,6 +197,18 @@ resource "aws_iam_role_policy" "ecs_service_role_policy" {
           "ec2:AuthorizeSecurityGroupIngress"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "iam:PassRole"
+        ]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "iam:PassedToService" = "ecs.amazonaws.com"
+          }
+        }
       }
     ]
   })

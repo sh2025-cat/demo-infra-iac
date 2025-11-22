@@ -1,0 +1,601 @@
+{
+    "serviceArn": "arn:aws:ecs:ap-northeast-2:277679348386:service/cat-demo-cluster/cat-demo-backend-service",
+    "serviceName": "cat-demo-backend-service",
+    "clusterArn": "arn:aws:ecs:ap-northeast-2:277679348386:cluster/cat-demo-cluster",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0",
+            "containerName": "backend",
+            "containerPort": 8080
+        }
+    ],
+    "serviceRegistries": [],
+    "status": "ACTIVE",
+    "desiredCount": 2,
+    "runningCount": 2,
+    "pendingCount": 0,
+    "capacityProviderStrategy": [
+        {
+            "capacityProvider": "FARGATE_SPOT",
+            "weight": 1,
+            "base": 0
+        }
+    ],
+    "platformVersion": "LATEST",
+    "platformFamily": "Linux",
+    "taskDefinition": "arn:aws:ecs:ap-northeast-2:277679348386:task-definition/cat-demo-backend:10",
+    "deploymentConfiguration": {
+        "deploymentCircuitBreaker": {
+            "enable": true,
+            "rollback": true
+        },
+        "maximumPercent": 200,
+        "minimumHealthyPercent": 100,
+        "strategy": "ROLLING",
+        "bakeTimeInMinutes": 0
+    },
+    "deployments": [
+        {
+            "id": "ecs-svc/2728485183825119385",
+            "status": "PRIMARY",
+            "taskDefinition": "arn:aws:ecs:ap-northeast-2:277679348386:task-definition/cat-demo-backend:10",
+            "desiredCount": 2,
+            "pendingCount": 0,
+            "runningCount": 2,
+            "failedTasks": 3,
+            "createdAt": "2025-11-22T16:11:49.240000+09:00",
+            "updatedAt": "2025-11-22T16:19:30.258000+09:00",
+            "capacityProviderStrategy": [
+                {
+                    "capacityProvider": "FARGATE_SPOT",
+                    "weight": 1,
+                    "base": 0
+                }
+            ],
+            "platformVersion": "1.4.0",
+            "platformFamily": "Linux",
+            "networkConfiguration": {
+                "awsvpcConfiguration": {
+                    "subnets": [
+                        "subnet-0a65a581e3b525d43",
+                        "subnet-0af11ec39cc282e8d"
+                    ],
+                    "securityGroups": [
+                        "sg-03d32807a168cbf70"
+                    ],
+                    "assignPublicIp": "DISABLED"
+                }
+            },
+            "rolloutState": "FAILED",
+            "rolloutStateReason": "ECS deployment circuit breaker: tasks failed to start."
+        }
+    ],
+    "roleArn": "arn:aws:iam::277679348386:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+    "events": [
+        {
+            "id": "73ae5b12-b036-468a-a5c5-87c5c266d863",
+            "createdAt": "2025-11-22T16:19:55.215000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "148c7157-bdb1-46d6-a651-40c5ce8c6468",
+            "createdAt": "2025-11-22T16:19:55.147000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/2728485183825119385) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "d7d0151f-13e4-41d0-89f5-db47c6e0b691",
+            "createdAt": "2025-11-22T16:19:55.140000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "41b2461c-80c1-4d4f-b6a2-4545470a24a1",
+            "createdAt": "2025-11-22T16:19:45.853000+09:00",
+            "message": "(service cat-demo-backend-service) has stopped 1 running tasks: (task f08962d8a2d2428580120bcc438cb16c)."
+        },
+        {
+            "id": "40bc576f-6810-4446-8879-9f2fb6b370a8",
+            "createdAt": "2025-11-22T16:19:45.809000+09:00",
+            "message": "(service cat-demo-backend-service) (task f08962d8a2d2428580120bcc438cb16c) (port 8080) is unhealthy in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0) due to (reason Health checks failed with these codes: [500])."
+        },
+        {
+            "id": "4cdd5a37-9619-41f0-89fd-b4a6ec598c26",
+            "createdAt": "2025-11-22T16:19:30.264000+09:00",
+            "message": "(service cat-demo-backend-service) (deployment ecs-svc/2728485183825119385) deployment failed: tasks failed to start."
+        },
+        {
+            "id": "3aa3c7e1-5257-4d33-adee-ae3e3dd09571",
+            "createdAt": "2025-11-22T16:19:27.298000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "3d138183-e4cf-4c3a-9e9a-55993398babd",
+            "createdAt": "2025-11-22T16:19:27.227000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/2728485183825119385) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "3199188d-8e66-491f-9a5e-c97f0ce54b21",
+            "createdAt": "2025-11-22T16:19:27.222000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "63483724-ecd1-4d98-87b0-ed8b4c5b0c76",
+            "createdAt": "2025-11-22T16:19:18.018000+09:00",
+            "message": "(service cat-demo-backend-service) has stopped 1 running tasks: (task 6d1c22ab11eb4b63bb9dd7b577c14b76)."
+        },
+        {
+            "id": "d2cbc308-d627-4dde-b3f8-e34a301f4439",
+            "createdAt": "2025-11-22T16:19:17.967000+09:00",
+            "message": "(service cat-demo-backend-service) (task 6d1c22ab11eb4b63bb9dd7b577c14b76) (port 8080) is unhealthy in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0) due to (reason Health checks failed with these codes: [500])."
+        },
+        {
+            "id": "cdfec907-6df3-40da-81db-805eab9f1d4c",
+            "createdAt": "2025-11-22T16:18:11.848000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "cda34a58-a49e-408d-b4fc-233dd665a7b2",
+            "createdAt": "2025-11-22T16:17:53.053000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task d039d3c983284ea8b9821382d3e55e3a). Amazon ECS replaced 1 tasks due to an unhealthy status."
+        },
+        {
+            "id": "c5e03fc8-bbd8-4966-b38c-3a8b4476588f",
+            "createdAt": "2025-11-22T16:17:33.370000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 3d442aa93c08482f982c57becaae48ba). Amazon ECS replaced 1 tasks due to an unhealthy status."
+        },
+        {
+            "id": "e275b80f-84ae-4411-b310-d811d893393b",
+            "createdAt": "2025-11-22T16:16:23.816000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "aaff5365-85a6-422a-92eb-b0634cc72c56",
+            "createdAt": "2025-11-22T16:16:23.753000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/2728485183825119385) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "d1e0c02f-0b53-4ea3-9509-39cb5d9eda69",
+            "createdAt": "2025-11-22T16:16:23.746000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "9e15edc6-2f35-4f23-bc27-28211c72a550",
+            "createdAt": "2025-11-22T16:16:14.312000+09:00",
+            "message": "(service cat-demo-backend-service) has stopped 1 running tasks: (task 9f39f17aa51b455984995c9bf96b63fc)."
+        },
+        {
+            "id": "6e276796-d318-42e9-acbd-5ab0de31493c",
+            "createdAt": "2025-11-22T16:16:14.274000+09:00",
+            "message": "(service cat-demo-backend-service) (task 9f39f17aa51b455984995c9bf96b63fc) (port 8080) is unhealthy in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0) due to (reason Health checks failed with these codes: [500])."
+        },
+        {
+            "id": "9ca611bd-50a3-4bee-944c-ae65faa6efa2",
+            "createdAt": "2025-11-22T16:16:04.457000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "bd9d5904-3ce3-4801-a751-e4031728c9a7",
+            "createdAt": "2025-11-22T16:16:04.398000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/2728485183825119385) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "e7c4db59-12e3-46c9-ae7e-f092b3dc696b",
+            "createdAt": "2025-11-22T16:16:04.392000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "27ee8a10-b750-4776-87be-2e96c8aef181",
+            "createdAt": "2025-11-22T16:15:54.170000+09:00",
+            "message": "(service cat-demo-backend-service) has stopped 1 running tasks: (task c13a3f9f75584276b47963bec7d692ad)."
+        },
+        {
+            "id": "2faeccd1-0902-46f5-acbb-781bb5223308",
+            "createdAt": "2025-11-22T16:15:54.125000+09:00",
+            "message": "(service cat-demo-backend-service) (task c13a3f9f75584276b47963bec7d692ad) (port 8080) is unhealthy in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0) due to (reason Health checks failed with these codes: [500])."
+        },
+        {
+            "id": "c2451e1c-c607-4a57-8117-3f3c122a8e4c",
+            "createdAt": "2025-11-22T16:14:46.370000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "865345a9-df72-4fde-9ce4-49d4d49f1d2a",
+            "createdAt": "2025-11-22T16:14:17.422000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task f08962d8a2d2428580120bcc438cb16c). Amazon ECS replaced 1 tasks due to an unhealthy status."
+        },
+        {
+            "id": "d4ce70e9-14d9-40b7-88e4-fc45666d1998",
+            "createdAt": "2025-11-22T16:13:58.542000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 9f39f17aa51b455984995c9bf96b63fc). Amazon ECS replaced 1 tasks due to an unhealthy status."
+        },
+        {
+            "id": "45b99e7f-482b-40c9-8718-44282e545132",
+            "createdAt": "2025-11-22T16:12:45.065000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "c0b2f79c-c8f1-48a7-8421-04d438ad708f",
+            "createdAt": "2025-11-22T16:12:33.605000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 6d1c22ab11eb4b63bb9dd7b577c14b76)."
+        },
+        {
+            "id": "770af5dc-2a3f-454b-a6d3-1236a7fb132f",
+            "createdAt": "2025-11-22T16:12:13.638000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task c13a3f9f75584276b47963bec7d692ad)."
+        },
+        {
+            "id": "7948b743-d350-4943-94dc-86af64a5dceb",
+            "createdAt": "2025-11-22T16:00:29.986000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/7797573628263558081) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "0fdff739-b287-46b5-90d7-568734f95013",
+            "createdAt": "2025-11-22T16:00:29.981000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "825b82c0-dcfa-4be4-a683-198d89f026a8",
+            "createdAt": "2025-11-22T16:00:09.967000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/7797573628263558081) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "917ca88a-1005-43ea-843f-c5cf5f85206b",
+            "createdAt": "2025-11-22T16:00:09.944000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "0e2206da-a5bd-4018-afcb-d44e2a749459",
+            "createdAt": "2025-11-22T15:59:25.799000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "9323e2b0-a781-4b4b-a06e-52e98c197c81",
+            "createdAt": "2025-11-22T15:59:20.698000+09:00",
+            "message": "(service cat-demo-backend-service) (deployment ecs-svc/7797573628263558081) deployment failed: tasks failed to start."
+        },
+        {
+            "id": "933b3e9f-dba1-4f0c-adc5-bfc51dc7b919",
+            "createdAt": "2025-11-22T15:59:16.200000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 23ee7b58899145feb061e21c65235298)."
+        },
+        {
+            "id": "6444722c-c684-4c2d-b258-fdb33f9a2fe9",
+            "createdAt": "2025-11-22T15:59:15.470000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/7797573628263558081) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "57c5e738-80b9-4abd-82ac-e4cf1bbcef7f",
+            "createdAt": "2025-11-22T15:59:15.464000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "dd124957-f9ef-47f0-ab95-a51ef69a93e5",
+            "createdAt": "2025-11-22T15:58:54.550000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 4cb01dfab6e84b3491415546b484f3b0)."
+        },
+        {
+            "id": "0f22731f-c49d-4be0-897e-962374767d40",
+            "createdAt": "2025-11-22T15:58:53.473000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/7797573628263558081) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "1c0fde90-b659-4adc-89cd-dc8c51c699c5",
+            "createdAt": "2025-11-22T15:58:53.462000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "5a5af779-a013-4650-8ffd-db86876d984d",
+            "createdAt": "2025-11-22T15:58:43.869000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "e4aae8d7-28c8-4ad9-8a18-9e0eba13e048",
+            "createdAt": "2025-11-22T15:58:21.199000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/7797573628263558081) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "e4905965-24b4-4e4f-ae9b-7ceed86e4737",
+            "createdAt": "2025-11-22T15:58:21.188000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "fb3e826f-ee20-4aa0-a0de-627d9ca0f53a",
+            "createdAt": "2025-11-22T15:58:21.130000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "35b4ab82-b7cf-4c59-a4e1-0018d38693fd",
+            "createdAt": "2025-11-22T15:58:12.891000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 30f1fdaff5854113abbb077bc96a0a37)."
+        },
+        {
+            "id": "c4d1e7ae-64de-46f7-a533-d0f6da153461",
+            "createdAt": "2025-11-22T15:57:41.031000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 6f2df3375b2d4e85a8edffc957f3cac2)."
+        },
+        {
+            "id": "500ca0fd-cfa0-44cc-bd03-e3576248f924",
+            "createdAt": "2025-11-22T15:57:40.172000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/7797573628263558081) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "828deaff-6754-4599-a47b-7b9214da2be8",
+            "createdAt": "2025-11-22T15:57:40.162000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "37cd0f3d-ac1a-4554-8c06-64ed7db4eaf8",
+            "createdAt": "2025-11-22T15:57:08.015000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "0461fdb5-41c2-4884-89b4-960514b18964",
+            "createdAt": "2025-11-22T15:56:59.290000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task e2191415f0804bb5aab5016ee8c4934d)."
+        },
+        {
+            "id": "03bfb71f-5cd6-47f3-963c-5d82d7c3d2a6",
+            "createdAt": "2025-11-22T15:56:58.544000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/7797573628263558081) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "eb058e72-0148-442d-9ab6-08396d18dd9a",
+            "createdAt": "2025-11-22T15:56:58.539000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "4b9d8475-7ab7-4bba-9765-e4d96cf5e8df",
+            "createdAt": "2025-11-22T15:56:36.716000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task e804948e101844ad9c2daa1fd90ce26c)."
+        },
+        {
+            "id": "365b96fa-cfee-468c-9f36-651b39977831",
+            "createdAt": "2025-11-22T15:56:26.487000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "75168df5-eec4-4af9-bbf2-0011e16fd3aa",
+            "createdAt": "2025-11-22T15:55:55.414000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 340b4859bc5e444f91de76c9ba82a8c8)."
+        },
+        {
+            "id": "944544c8-ebd3-49ec-9383-5ffca0fc0bce",
+            "createdAt": "2025-11-21T12:44:14.461000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/6946353902827747769) has begun draining connections on 2 tasks."
+        },
+        {
+            "id": "736de970-1b5d-49c7-a52d-cd9138846148",
+            "createdAt": "2025-11-21T12:44:14.457000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 2 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "ec4bde8e-a654-423a-bc6d-a8ae1ccc4247",
+            "createdAt": "2025-11-21T12:43:52.993000+09:00",
+            "message": "(service cat-demo-backend-service) registered 2 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "9cb90359-4359-47fd-aa8b-fdfb5502cad2",
+            "createdAt": "2025-11-21T12:43:31.299000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/6946353902827747769) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "994bc4ff-5949-4c58-a33a-0214feea26f2",
+            "createdAt": "2025-11-21T12:43:31.293000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "18df9843-99ea-4fdc-baf7-b62920173126",
+            "createdAt": "2025-11-21T12:43:25.516000+09:00",
+            "message": "(service cat-demo-backend-service) (deployment ecs-svc/6946353902827747769) deployment failed: tasks failed to start."
+        },
+        {
+            "id": "98ee9b2f-2e48-45c4-84a6-9672e69df8de",
+            "createdAt": "2025-11-21T12:43:21.492000+09:00",
+            "message": "(service cat-demo-backend-service) has started 2 tasks: (task 5c59f1cdc44a499793511719df1c6193) (task cf5aced158d64f24a9588097ba7dc9d1)."
+        },
+        {
+            "id": "089b38f4-7875-40b7-8ee3-06a31797ed12",
+            "createdAt": "2025-11-21T12:43:20.868000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/6946353902827747769) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "b58e1cb2-e642-4edf-9421-320cc6828a66",
+            "createdAt": "2025-11-21T12:43:20.863000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "3f4b61a4-38c8-48d8-bae8-d20477c47ec0",
+            "createdAt": "2025-11-21T12:42:59.735000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "cbe47539-8dcc-4ed3-8159-73bb98aa98ff",
+            "createdAt": "2025-11-21T12:42:38.009000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 8a81ae9af25c4f23a6ca6cc8a14ea2ef)."
+        },
+        {
+            "id": "755a59a4-01c9-4a6c-bd07-94634b2f3400",
+            "createdAt": "2025-11-21T12:42:37.214000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/6946353902827747769) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "a0ec89c3-fcff-45ea-9929-48f4d5130cd4",
+            "createdAt": "2025-11-21T12:42:37.208000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "032742a3-b34b-4dd0-9682-a28bfa212a10",
+            "createdAt": "2025-11-21T12:42:27.957000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task cfe7d734ee1340d9ac0cf3e5f6ffa7ba)."
+        },
+        {
+            "id": "6e64f9bc-0eae-4903-a3f7-4105af019a75",
+            "createdAt": "2025-11-21T12:42:27.149000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/6946353902827747769) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "d8ead084-92d4-40e3-ba17-8ebfe7e51126",
+            "createdAt": "2025-11-21T12:42:27.138000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "80f6161b-0dba-454a-9fa4-4b1f62533c7c",
+            "createdAt": "2025-11-21T12:42:17.234000+09:00",
+            "message": "(service cat-demo-backend-service) registered 2 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "8e175b8b-6999-4e01-ba09-0bee60fea43e",
+            "createdAt": "2025-11-21T12:41:56.541000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/6946353902827747769) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "8ef6453b-4170-4775-ae08-f7865a90f964",
+            "createdAt": "2025-11-21T12:41:56.535000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "700b61b2-8725-4e49-901b-ab4326cfe8c4",
+            "createdAt": "2025-11-21T12:41:46.835000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task a30997f980554ecf91b6df92fe95a7d6)."
+        },
+        {
+            "id": "362c0599-ad51-42d9-828c-bac769c38986",
+            "createdAt": "2025-11-21T12:41:36.099000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 119b19af92f34bcd99a7bc1c7a2b9915)."
+        },
+        {
+            "id": "8b8459aa-127f-49aa-be12-c45631c12ecf",
+            "createdAt": "2025-11-21T12:41:35.446000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/6946353902827747769) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "be1f5f7c-0245-48dd-8fbd-f0741ab1092f",
+            "createdAt": "2025-11-21T12:41:35.441000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "6d614a7c-9d4f-4fa4-9b35-f42c53e51283",
+            "createdAt": "2025-11-21T12:41:14.395000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "e4929050-e5de-4f89-84c4-bafc8fe9361b",
+            "createdAt": "2025-11-21T12:41:03.188000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task b0eb888f5181411092df9c117218b3f5)."
+        },
+        {
+            "id": "fe90d94a-5f86-4d0a-9c91-febca9ba9841",
+            "createdAt": "2025-11-21T12:40:41.992000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task d32c96e23e25436f9215fa00d43cb108)."
+        },
+        {
+            "id": "d8af1dac-a788-4bce-bd36-c2effd75adc4",
+            "createdAt": "2025-11-21T11:15:11.521000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/1683718795639497523) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "aa50d71f-95db-49b2-add0-59b2fd7114b9",
+            "createdAt": "2025-11-21T11:15:11.511000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "0538ed7c-9067-4fd9-a3b4-b4a86ec8642c",
+            "createdAt": "2025-11-21T11:15:01.632000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "18efc240-9907-469a-a910-7db1e8ce4ee5",
+            "createdAt": "2025-11-21T11:14:51.534000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/1683718795639497523) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "1f4820ea-bb95-4d19-9ede-e2af740d94dc",
+            "createdAt": "2025-11-21T11:14:51.530000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "12ac2e2e-ac3d-47bc-8911-c194ef3ed5c6",
+            "createdAt": "2025-11-21T11:14:41.413000+09:00",
+            "message": "(service cat-demo-backend-service) (deployment ecs-svc/1683718795639497523) deployment failed: tasks failed to start."
+        },
+        {
+            "id": "16e12390-a7fe-44a9-ad29-19913c2fe34f",
+            "createdAt": "2025-11-21T11:14:39.051000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/1683718795639497523) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "7b7bde2d-f58a-49a3-a6b8-3ce77112a41a",
+            "createdAt": "2025-11-21T11:14:39.041000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "cfd22cac-054c-410c-9b7d-8f025bfd509c",
+            "createdAt": "2025-11-21T11:14:38.977000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "d42ba649-756a-48a9-a31b-93b525486b06",
+            "createdAt": "2025-11-21T11:14:29.883000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 78398652f1154c55a311519c578243bc)."
+        },
+        {
+            "id": "1aa58811-0ca3-43af-a502-55d96095321c",
+            "createdAt": "2025-11-21T11:14:19.448000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "d2c6aa1f-eac9-43c5-9973-3e798eb91239",
+            "createdAt": "2025-11-21T11:14:08.117000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task d0bb643fac294d73abd9fd3aa887bd32)."
+        },
+        {
+            "id": "a9555ba8-e42c-4541-8477-ec83f6f88310",
+            "createdAt": "2025-11-21T11:14:07.241000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/1683718795639497523) has begun draining connections on 1 tasks."
+        },
+        {
+            "id": "247e98fe-2275-4632-a16e-4c2526128333",
+            "createdAt": "2025-11-21T11:14:07.231000+09:00",
+            "message": "(service cat-demo-backend-service) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "5ea5b852-c948-4072-95a0-2589416066a8",
+            "createdAt": "2025-11-21T11:13:46.157000+09:00",
+            "message": "(service cat-demo-backend-service) registered 1 targets in (target-group arn:aws:elasticloadbalancing:ap-northeast-2:277679348386:targetgroup/cat-demo-backend-blue-tg/54d404a90736b6b0)"
+        },
+        {
+            "id": "9c7c6f36-facb-4f02-adc0-cbefeff57210",
+            "createdAt": "2025-11-21T11:13:36.949000+09:00",
+            "message": "(service cat-demo-backend-service) has started 1 tasks: (task 01c9c2f575fc45669f47446bb9d65b23)."
+        },
+        {
+            "id": "93392070-56e8-42d0-b5d1-c61db0fd0a30",
+            "createdAt": "2025-11-21T11:13:36.355000+09:00",
+            "message": "(service cat-demo-backend-service, taskSet ecs-svc/1683718795639497523) has begun draining connections on 1 tasks."
+        }
+    ],
+    "createdAt": "2025-11-21T11:11:23.798000+09:00",
+    "placementConstraints": [],
+    "placementStrategy": [],
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "subnet-0a65a581e3b525d43",
+                "subnet-0af11ec39cc282e8d"
+            ],
+            "securityGroups": [
+                "sg-03d32807a168cbf70"
+            ],
+            "assignPublicIp": "DISABLED"
+        }
+    },
+    "healthCheckGracePeriodSeconds": 60,
+    "schedulingStrategy": "REPLICA",
+    "deploymentController": {
+        "type": "ECS"
+    },
+    "createdBy": "arn:aws:iam::277679348386:user/admin",
+    "enableECSManagedTags": false,
+    "propagateTags": "NONE",
+    "enableExecuteCommand": true,
+    "availabilityZoneRebalancing": "ENABLED"
+}

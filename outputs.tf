@@ -240,3 +240,17 @@ output "frontend_log_group_name" {
   description = "Frontend CloudWatch log group name"
   value       = module.cloudwatch_logs.frontend_log_group_name
 }
+
+# ===========================================
+# Lambda Validator Outputs
+# ===========================================
+
+output "lambda_validator_function_name" {
+  description = "Lambda Validator function name"
+  value       = module.lambda_validator.lambda_function_name
+}
+
+output "lambda_validator_function_arn" {
+  description = "Lambda Validator function ARN"
+  value       = module.lambda_validator.lambda_function_arn
+}

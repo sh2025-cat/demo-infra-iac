@@ -218,3 +218,20 @@ module "bastion" {
     Project     = "Softbank2025-Cat"
   }
 }
+
+# ===========================================
+# Lambda Deployment Validator Module
+# ===========================================
+
+module "lambda_validator" {
+  source = "./modules/lambda-validator"
+
+  project_name      = var.project_name
+  backend_url       = "https://${var.backend_domain}"
+  backend_test_port = "18443"
+
+  tags = {
+    Environment = var.environment
+    Project     = "Softbank2025-Cat"
+  }
+}
